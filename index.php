@@ -2,6 +2,7 @@
 define('BOT_TOKEN', '554666790:AAEnsrY6pYX8JXgK1JTWRwVJWDXziuj1f7g');
 define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
+
 function apiRequestWebhook($method, $parameters) {
     if (!is_string($method)) {
         error_log("Method name must be a string\n");
@@ -124,9 +125,51 @@ function processMessage($message) {
   
   $inlinebtn = json_encode([
     'inline_keyboard'=>[
-    [['text'=>'تبلیغات','url'=>'http://telegram.me/mench']]
+    [['text'=>'سازنده','url'=>'morteza taheri']]
   ]
   ]);
+    
+    
+    if (isset($message["forward_date"]) && $chat_id == $admin){   
+        
+if (isset($message ["animation"])){ //GIF
+$id_gif = $message ["animation"]["file_id"];
+apiRequest("sendAnimation", array('chat_id' => $chat_id, "animation" => $id_gif ,"caption" =>""));     
+}else if (isset($message ["photo"])){ //PHOTO
+$photo = end($message ["photo"]);
+$id_photo = $photo["file_id"];
+apiRequest("sendPhoto", array('chat_id' => $chat_id, "photo" => $id_photo ,"caption" =>""));     
+}else if (isset($message ["sticker"])){ //STICKER
+$id_sticker = $message ["sticker"]["file_id"];
+apiRequest("sendSticker", array('chat_id' => $chat_id, "sticker" =>$id_sticker ));     
+}else if (isset($message ["audio"])){ //AUDIO
+$id_audio = $message ["audio"]["file_id"];
+apiRequest("sendAudio", array('chat_id' => $chat_id, "audio" => $id_audio ,"caption" =>""));     
+}else if (isset($message ["video"])){ //VIDEO
+$id_video = $message ["video"]["file_id"];
+apiRequest("sendVideo", array('chat_id' => $chat_id, "video" => $id_video ,"caption" =>""));     
+}else if (isset($message ["voice"])){ //voice
+$id_voice = $message ["voice"]["file_id"];
+apiRequest("sendVoice", array('chat_id' => $chat_id, "voice" => $id_voice ,"caption" =>""));    
+}else if (isset($message ["video_note"])){ //VIDEO_NOTE
+$id_videonote = $message ["video_note"]["file_id"];
+apiRequest("sendVideoNote", array('chat_id' => $chat_id, "video_note" => $id_videonote ,"caption" =>""));  
+}else if (isset($message ["document"])){ //document
+$document = $message ["document"]["file_id"];
+apiRequest("sendDocument", array('chat_id' => $chat_id, "document" => $document ,"caption" =>""));
+}else if (isset($message ["text"])){ //TEXT
+$text = $message ["text"];
+apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => $text ,"parse_mode" =>"HTML"));
+}else{
+ apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => ":relieved:" ,"parse_mode" =>"HTML"));
+				}
+    
+    
+    
+    }
+    
+    
+    
     if (isset($message['photo'])) {
 
         if ( $chat_id != $admin) {
